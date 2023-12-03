@@ -29,11 +29,13 @@ def predict(request):
     Xtrain, Xtest, Ytrain, Ytest = train_test_split(X_n, Y, test_size = 0.2)
     model = GaussianNB()
     model.fit(Xtrain, Ytrain)
-    var1 = float(request.GET['N'])
-    var2 = float(request.GET['K'])
-    var3 = float(request.GET['P'])
-    var4 = float(request.GET['R'])
-    var5 = Numerics.fit_transform([request.GET['C']])[0]
-    pred = model.predict(np.array([var1, var2, var3, var4, var5]).reshape(1,-1))
-    label = str(pred[0])
-    return render(request,'fertilizer.html', {'result': label})
+    if (request.method)=="POST":
+        var1 = float(request.POST['N'])
+        var2 = float(request.POST['K'])
+        var3 = float(request.POST['P'])
+        var4 = float(request.POST['R'])
+        var5 = Numerics.fit_transform([request.POST['C']])[0]
+        pred = model.predict(np.array([var1, var2, var3, var4, var5]).reshape(1,-1))
+        label = str(pred[0])
+        return render(request,'fertilizer.html', {'result': label})
+    return render(request,'fertilizer.html')
